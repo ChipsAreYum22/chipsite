@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Instant Messaging</title>
+  </head>
+  <body>
+    <h1>Instant Messaging</h1>
+    <div id="message-area">
+      <!-- Messages will be displayed here -->
+    </div>
+    <form id="message-form">
+      <input type="text" id="message-input" placeholder="Type your message...">
+      <button type="submit">Send</button>
+    </form>
+    
+    <script>
+      // Connect to a WebSocket server
+      const ws = new WebSocket("ws://localhost:3000");
+      
+      // Display messages received from the server
+      ws.onmessage = (event) => {
+        const message = event.data;
+        const messageElement = document.createElement("div");
+        messageElement.textContent = message;
+        document.getElementById("message-area").appendChild(messageElement);
+      };
+      
+      // Send messages to the server when the form is submitted
+      document.getElementById("message-form").addEventListener("submit", (event) => {
+        event.preventDefault();
+        const message = document.getElementById("message-input").value;
+        ws.send(message);
+        document.getElementById("message-input").value = "";
+      });
+    </script>
+  </body>
+</html>
